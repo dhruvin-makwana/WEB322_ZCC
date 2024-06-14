@@ -4,7 +4,7 @@ const app=express();
 
 
 app.get("/",(req,res)=>{
-    res.send("This is your homepage")
+    res.send("This is your Home")
 })
 
 app.get("/test-endpoint",(req,res)=>{
