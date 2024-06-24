@@ -2,9 +2,10 @@
   "name": "simple-web-server",
   "version": "1.0.0",
   "description": "A really simple web server",
-  "main": "index.js",
+  "main": "serverjs",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build-css": "sass --no-source-map --watch scss:public/css"
   },
   "repository": {
     "type": "git",
@@ -21,5 +22,8 @@
   "homepage": "https://github.com/dhruvin-makwana/WEB322_ZCC#readme",
   "dependencies": {
     "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "sass": "^1.77.5"
   }
 }
