@@ -23,6 +23,7 @@
   "homepage": "https://github.com/dhruvin-makwana/WEB322_ZCC#readme",
   "dependencies": {
     "@tailwindcss/typography": "^0.5.13",
+    "cookie-parser": "^1.4.6",
     "daisyui": "^4.12.7",
     "express": "^4.19.2"
   },

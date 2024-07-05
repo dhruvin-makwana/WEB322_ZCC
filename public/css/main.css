@@ -1180,10 +1180,6 @@ html {
   width: 50%;
 }
 
-.w-2 {
-  width: 0.5rem;
-}
-
 .flex-col {
   flex-direction: column;
 }
@@ -1204,8 +1200,9 @@ html {
   border-width: 1px;
 }
 
-.border-r {
-  border-right-width: 1px;
+.bg-blue-300 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(147 197 253 / var(--tw-bg-opacity));
 }
 
 .bg-white {
@@ -1213,29 +1210,12 @@ html {
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
-.bg-blue-300 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(147 197 253 / var(--tw-bg-opacity));
-}
-
-.bg-current {
-  background-color: currentColor;
-}
-
-.to-blue-300 {
-  --tw-gradient-to: #93c5fd var(--tw-gradient-to-position);
-}
-
-.p-\[\] {
-  padding: ;
+.p-2 {
+  padding: 0.5rem;
 }
 
 .p-\[50px\] {
   padding: 50px;
-}
-
-.p-2 {
-  padding: 0.5rem;
 }
 
 .text-center {
