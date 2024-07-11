@@ -1,10 +1,4 @@
-let users = [
-  {
-    username: "test@test.com",
-    password: "123456",
-    isLoggedin: false,
-  },
-];
+
 const express = require("express");
 const path = require("path");
 
@@ -14,6 +8,14 @@ var cookieParser = require("cookie-parser");
 app.use(cookieParser());
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
+
+let users = [
+  {
+    username: "test@test.com",
+    password: "123456",
+    isLoggedin: false,
+  },
+];
 
 app.locals.startedAt = new Date();
 app.set("test-setting", "settings-val");
