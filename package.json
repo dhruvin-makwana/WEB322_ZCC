@@ -4,6 +4,7 @@
   "description": "A really simple web server",
   "main": "serverjs",
   "scripts": {
+    "start":"node --watch ./server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build-css": "sass --no-source-map --watch scss:public/css",
     "tw:build": "tailwindcss build -i ./public/css/tailwind.css -o ./public/css/main.css --watch"
