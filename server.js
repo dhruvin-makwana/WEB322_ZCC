@@ -8,12 +8,26 @@ var cookieParser = require("cookie-parser");
 app.use(cookieParser());
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 let users = [
   {
-    username: "test@test.com",
+    username: "testuser",
+    firstName: "Test",
+    lastName: "User",
+    email: "test@test.com",
     password: "123456",
+    profileImage:"https://placehold.co/300?text=T",
     isLoggedin: false,
+  },
+  {
+    username: "dummyuser",
+    firstName: "Dummy",
+    lastName: "User",
+    email: "dummyuser@test.com",
+    password: "654321",
+    profileImage:"https://placehold.co/300?text=D",
+    isLoggedin: true,
   },
 ];
 
@@ -31,7 +45,6 @@ function authMiddleware(req, res, next) {
       res.redirect("/login")
     }
   }
-
 }
 
 app.use(authMiddleware);
@@ -94,6 +107,20 @@ app.get("/home", (req, res) => {
 
 app.get("/profile", (req, res) => {
   res.sendFile(path.join(__dirname, "/views/profile.html"));
+});
+
+
+app.get('/api/profile', (req, res) => {
+  let user = users.find((elm) => elm.username === req.cookies["username"]);
+  if (user && user.isLoggedin) {
+    res.json({
+      username:user.username,
+      firstName:user.firstName,
+      lastName:user.lastName,
+      profileImage:user.profileImage,
+      email:user.email
+    })
+  }
 });
 
 app.listen(8080, () => {
