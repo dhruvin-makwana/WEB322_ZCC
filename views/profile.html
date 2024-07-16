@@ -60,7 +60,6 @@
           <div class="ml-5 justify-center flex flex-col">
             <h2 class="text-lg font-semibold" id="name">John Doe</h2>
             <p class="text-gray-600" id="username">@johndoe</p>
-            <p class="text-gray-600" id="email">john@doe.com</p>
           </div>
         </div>
       </section>
@@ -71,12 +70,12 @@
           method: "GET",
         });
         let fetchReq = fetch(myRequest);
-        fetchReq.then((res)=>{
-          return res.json()
-        }).then((data)=>{
+        fetchReq.then(async (res)=>{
+          let data= await res.json()
           document.getElementById("name").innerText= data.firstName+" "+data.lastName
           document.getElementById("username").innerText= "@"+data.username
-          document.getElementById("email").innerText= data.email
+        }).catch(()=>{
+          console.log('Error Fetching Data')
         })
 
       });

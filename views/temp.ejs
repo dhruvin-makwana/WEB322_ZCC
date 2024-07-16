@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    Randon Number: <%= data.randomNumber %> Code snippet:
+    <code>
+      HTML Escaped <%= data.snippet %> <br />
+      Unescaped - <%- data.snippet %> <br />
+    </code>
+    <% data.items.forEach(element => { %>
+         <%= element %> 
+        <% }); %>
+  </body>
+</html>
