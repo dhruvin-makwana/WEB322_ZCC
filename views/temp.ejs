@@ -6,13 +6,15 @@
     <title>Document</title>
   </head>
   <body>
-    Randon Number: <%= data.randomNumber %> Code snippet:
+    Random Number: <%= data.randomNumber %> Code snippet:
     <code>
       HTML Escaped <%= data.snippet %> <br />
       Unescaped - <%- data.snippet %> <br />
     </code>
-    <% data.items.forEach(element => { %>
-         <%= element %> 
-        <% }); %>
+    <ul>
+      <% data.items.forEach(element => { %>
+        <li> <%= element %> </li>
+      <% }); %>
+    </ul>
   </body>
 </html>

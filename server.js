@@ -20,6 +20,7 @@ let users = [
     password: "123456",
     profileImage: "https://placehold.co/300?text=T",
     isLoggedin: false,
+    isVerified:true,
     tweets: [
       {
         tweetContent: "Test tweet one",
@@ -31,6 +32,10 @@ let users = [
       },
       {
         tweetContent: "Test tweet three",
+        timeStamp: "2024-07-01",
+      },
+      {
+        tweetContent: "Test tweet Four",
         timeStamp: "2024-07-01",
       },
     ],
@@ -77,7 +82,7 @@ function authMiddleware(req, res, next) {
   }
 }
 
-// app.use(authMiddleware);
+app.use(authMiddleware);
 
 app.get("/login", (req, res) => {
   res.sendFile(path.join(__dirname, "/views/login.html"));
@@ -121,166 +126,29 @@ app.get("/:lang/home", (req, res) => {
 });
 
 app.get("/home", (req, res) => {
-  // const pageLang = req.query.language;
-  // switch (pageLang) {
-  //   case "fr":
-  //     res.sendFile(path.join(__dirname, "/views/home-fr.html"));
-  //     break;
-  //   case "es":
-  //     res.sendFile(path.join(__dirname, "/views/home-es.html"));
-  //     break;
-  //   default:
-  //     res.sendFile(path.join(__dirname, "/views/home.html"));
-  //     break;
-  // }
-  let userTweets = req.user.tweets;
-  let dynamicTweets = "";
-  for (let index = 0; index < userTweets.length; index++) {
-    const tweetData = userTweets[index];
-    let tweet = `
-     <!-- Tweet card -->
-        <div class="bg-white border border-gray-200 p-4 rounded-lg shadow-sm">
-          <div class="flex">
-            <div class="flex-shrink-0">
-              <img
-                src="https://via.placeholder.com/50"
-                alt="User avatar"
-                class="w-10 h-10 rounded-full"
-              />
-            </div>
-            <div class="ml-2">
-              <h2 class="text-lg font-semibold">${
-                req.user.firstName + " " + req.user.lastName
-              }</h2>
-              <p class="text-gray-600">@${req.user.username} &middot; ${
-      tweetData.timeStamp
-    }</p>
-            </div>
-          </div>
-          <p class="mt-2 text-gray-800">
-            ${tweetData.tweetContent}
-          </p>
-          <div class="mt-4 flex justify-between items-center">
-            <div class="flex flex-col">
-              <button class="text-gray-600 hover:text-blue-500 mr-4">
-                <svg
-                  class="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M5 15l7-7 7 7"
-                  ></path>
-                </svg>
-                20
-              </button>
-              <button class="text-gray-600 hover:text-blue-500">
-                <svg
-                  class="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M19 9l-7 7-7-7"
-                  ></path>
-                </svg>
-              </button>
-            </div>
-            <button class="text-gray-600 hover:text-blue-500">Comment</button>
-          </div>
-        </div>
-    `;
-    dynamicTweets += tweet;
-  }
-  res.send(`
-    <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Chirper Home</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
-      rel="stylesheet"
-    />
-  </head>
-  <body class="bg-gray-100">
-    <!-- Navigation bar -->
-    <nav class="bg-white border-b border-gray-200 p-4">
-      <div class="max-w-7xl mx-auto flex justify-between items-center">
-        <div class="flex-shrink-0">
-          <a href="#" class="text-xl font-bold text-blue-500">Chirper</a>
-        </div>
-        <div class="flex">
-          <a href="#" class="text-gray-600 hover:text-blue-500 mr-4 border-b border-blue-500">Home</a>
-          <a href="#" class="text-gray-600 hover:text-blue-500 mr-4">Explore</a>
-          <a href="#" class="text-gray-600 hover:text-blue-500 mr-4"
-            >Notifications</a
-          >
-          <a href="#" class="text-gray-600 hover:text-blue-500 mr-4"
-            >Messages</a
-          >
-        </div>
-        <div
-          class="flex items-center border border-gray-200 rounded-full hover:bg-grey-600"
-        >
-          <a href="#" class="text-gray-600 hover:text-blue-500">
-            <img
-              src="https://via.placeholder.com/50"
-              alt="User avatar"
-              class="w-10 h-10 rounded-full m-2"
-          /></a>
-        </div>
-      </div>
-    </nav>
-
-    <!-- Main content area -->
-    <main class="max-w-7xl mx-auto mt-4">
-      <!-- Compose tweet form -->
-      <section
-        class="bg-white border border-gray-200 p-4 rounded-lg shadow-sm mb-4"
-      >
-        <form action="#" method="POST">
-          <textarea
-            id="tweetContent"
-            name="tweetContent"
-            rows="3"
-            class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:border-blue-500"
-            placeholder="What's happening?"
-          ></textarea>
-          <div class="flex justify-end items-center mt-2">
-            <button
-              type="submit"
-              class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-full focus:outline-none"
-            >
-              Tweet
-            </button>
-          </div>
-        </form>
-      </section>
-      <!-- Tweets -->
-      <section class="grid grid-cols-1 gap-4">
-       ${dynamicTweets}
-      </section>
-    </main>
-  </body>
-</html>
-
-    `);
+  res.render('viewData',{
+    route:"/home",
+    name: `${req.user.firstName} ${req.user.lastName}`,
+    username: req.user.username,
+    tweets:req.user.tweets,
+    isVerified:req.user.isVerified
+  })
 });
 
 app.get("/profile", (req, res) => {
-  res.sendFile(path.join(__dirname, "/views/profile.html"));
+  res.render('viewData',{
+    route:"/profile",
+  })
+});
+app.get("/explore", (req, res) => {
+  res.render('viewData',{
+    route:"/explore",
+  })
+});
+app.get("/notifications", (req, res) => {
+  res.render('viewData',{
+    route:"/notifications",
+  })
 });
 
 app.get("/api/profile", (req, res) => {
