@@ -6,6 +6,8 @@ app.set("view engine", "ejs");
 
 var cookieParser = require("cookie-parser");
 const { randomInt } = require("crypto");
+
+const authMiddleware = require("./middlewares/authMiddleware");
 app.use(cookieParser());
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
@@ -25,7 +27,7 @@ let users = [
     password: "123456",
     profileImage: "https://placehold.co/300?text=T",
     isLoggedin: false,
-    isVerified:true,
+    isVerified: true,
     tweets: [
       {
         tweetContent: "Test tweet one",
@@ -73,20 +75,6 @@ let users = [
 app.locals.startedAt = new Date();
 app.set("test-setting", "settings-val");
 
-function authMiddleware(req, res, next) {
-  if (req.path === "/login") {
-    next();
-  } else {
-    let user = users.find((elm) => elm.username === req.cookies["username"]);
-    if (user && user.isLoggedin) {
-      req.user = user;
-      next();
-    } else {
-      res.redirect("/login");
-    }
-  }
-}
-
 app.use(authMiddleware);
 
 app.get("/login", (req, res) => {
@@ -131,29 +119,29 @@ app.get("/:lang/home", (req, res) => {
 });
 
 app.get("/home", (req, res) => {
-  res.render('viewData',{
-    route:"/home",
+  res.render("viewData", {
+    route: "/home",
     name: `${req.user.firstName} ${req.user.lastName}`,
     username: req.user.username,
-    tweets:req.user.tweets,
-    isVerified:req.user.isVerified
-  })
+    tweets: req.user.tweets,
+    isVerified: req.user.isVerified,
+  });
 });
 
 app.get("/profile", (req, res) => {
-  res.render('viewData',{
-    route:"/profile",
-  })
+  res.render("viewData", {
+    route: "/profile",
+  });
 });
 app.get("/explore", (req, res) => {
-  res.render('viewData',{
-    route:"/explore",
-  })
+  res.render("viewData", {
+    route: "/explore",
+  });
 });
 app.get("/notifications", (req, res) => {
-  res.render('viewData',{
-    route:"/notifications",
-  })
+  res.render("viewData", {
+    route: "/notifications",
+  });
 });
 
 app.get("/api/profile", (req, res) => {
@@ -173,8 +161,8 @@ app.get("/temp", (req, res) => {
   res.render("temp", {
     data: {
       randomNumber: number,
-      snippet:"<p>Hello</p>",
-      items:["item1", "item2", "item3"]
+      snippet: "<p>Hello</p>",
+      items: ["item1", "item2", "item3"],
     },
   });
 });
