@@ -11,6 +11,11 @@ app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+// select *  from users where username=testuser
+
+// users.filter((elm)=>elm.username=="testuser")
+
+
 let users = [
   {
     username: "testuser",
