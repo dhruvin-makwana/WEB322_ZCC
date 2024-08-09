@@ -1,108 +1,34 @@
-let users = [
-  {
-    username: "testuser",
-    firstName: "Test",
-    lastName: "User",
-    email: "test@test.com",
-    password: "123456",
-    profileImage: "https://placehold.co/300?text=T",
-    isLoggedin: false,
-    isVerified: true,
-    tweets: [
-      {
-        tweetContent: "Test tweet one",
-        timeStamp: "2024-07-15",
-      },
-      {
-        tweetContent: "Test tweet two",
-        timeStamp: "2024-07-12",
-      },
-      {
-        tweetContent: "Test tweet three",
-        timeStamp: "2024-07-01",
-      },
-      {
-        tweetContent: "Test tweet Four",
-        timeStamp: "2024-07-01",
-      },
-    ],
-  },
-  {
-    username: "dummyuser",
-    firstName: "Dummy",
-    lastName: "User",
-    email: "dummyuser@test.com",
-    password: "654321",
-    profileImage: "https://placehold.co/300?text=D",
-    isLoggedin: false,
-    tweets: [
-      {
-        tweetContent: "Dummy tweet one",
-        timeStamp: "2024-07-15",
-      },
-      {
-        tweetContent: "Dummy tweet two",
-        timeStamp: "2024-07-12",
-      },
-      {
-        tweetContent: "Dummy tweet three",
-        timeStamp: "2024-07-01",
-      },
-    ],
-  },
-];
 const express = require("express");
 const path = require("path");
-
-const app = express();
-app.set("view engine", "ejs");
-
 var cookieParser = require("cookie-parser");
 const { randomInt } = require("crypto");
+const { Users, tweets, initDB } = require("./models/models");
+const authMiddleware = require("./middlewares/authMiddleware");
 
-// const authMiddleware = require("./middlewares/authMiddleware");
+const app = express();
+
+app.set("view engine", "ejs");
 app.use(cookieParser());
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-
-app.use(function(req, res, next) {
-  if (req.path === "/login") {
-    next();
-  } else {
-    let user = users.find((elm) => elm.username === req.cookies["username"]);
-    if (user && user.isLoggedin) {
-      req.user = user;
-      next();
-    } else {
-      res.redirect("/login");
-    }
-  }
-})
-
-app.locals.startedAt = new Date();
-app.set("test-setting", "settings-val");
-
-// app.use(authMiddleware);
+app.use(authMiddleware);
 
 app.get("/login", (req, res) => {
   res.sendFile(path.join(__dirname, "/views/login.html"));
 });
 
-app.post("/login", (req, res) => {
-  let success = false;
-  users.forEach((elm, idx) => {
-    if (
-      elm.username == req.body["username"] &&
-      elm.password === req.body["password"]
-    ) {
-      users[idx].isLoggedin = true;
-      success = true;
-    }
+app.post("/login", async (req, res) => {
+  let user = await Users.findOne({
+    where: { username: req.body["username"], password: req.body["password"] },
+    include: tweets,
   });
-  if (!success) {
+
+  if (!user) {
     res.redirect("/login");
   } else {
+    user.isLoggedin = true;
+    await user.save();
     res.cookie("username", req.body["username"], {
       maxAge: 1000 * 3600 * 48,
       httpOnly: true,
@@ -131,7 +57,7 @@ app.get("/home", (req, res) => {
     route: "/home",
     name: `${req.user.firstName} ${req.user.lastName}`,
     username: req.user.username,
-    tweets: req.user.tweets,
+    tweets: req.user.Tweets,
     isVerified: req.user.isVerified,
   });
 });
@@ -175,6 +101,9 @@ app.get("/temp", (req, res) => {
   });
 });
 
-app.listen(8080, () => {
-  console.log("Server started on port 8080");
+initDB().then(() => {
+  console.log("Database initialized!!");
+  app.listen(8080, () => {
+    console.log("Server started on port 8080"); // This line is not covered by the test
+  });
 });

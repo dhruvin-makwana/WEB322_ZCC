@@ -1,13 +1,20 @@
-export default function authMiddleware(req, res, next) {
-    if (req.path === "/login") {
+const { Users, Tweets } = require("../models/models");
+
+async function authMiddleware(req, res, next) {
+  if (req.path === "/login") {
+    next();
+  } else {
+    const user = await Users.findOne({
+      where: { username: req.cookies["username"] },
+      include: Tweets,
+    });
+    if (user && user.isLoggedin) {
+      req.user = user;
       next();
     } else {
-      let user = users.find((elm) => elm.username === req.cookies["username"]);
-      if (user && user.isLoggedin) {
-        req.user = user;
-        next();
-      } else {
-        res.redirect("/login");
-      }
+      res.redirect("/login");
     }
   }
+}
+
+module.exports = authMiddleware;

@@ -33,7 +33,6 @@ Tweets.belongsTo(Users);
 // 6        test Tweet    xxxx-xx-xx 2
 // 7        test Tweet    xxxx-xx-xx 2
 async function initDB() {
-  2;
   await sequelize.authenticate();
   await sequelize.sync();
 }
@@ -100,7 +99,7 @@ initDB().then(async () => {
   console.log("query executed!!");
   const user = await Users.findOne({
     where: { firstname: "Dummy2" },
-    include:Tweets
+    include: Tweets,
   });
-  console.log(user)
+  console.log(user);
 });
