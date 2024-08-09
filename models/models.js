@@ -28,46 +28,48 @@ Tweets.belongsTo(Users);
 async function initDB() {
   await sequelize.authenticate();
   await sequelize.sync();
-  await Users.create({
-    username: "testuser",
-    firstName: "Test",
-    lastName: "User",
-    email: "test@test.com",
-    password: "123456",
-    profileImage: "https://placehold.co/300?text=T",
-    isLoggedin: false,
-    isVerified: true,
-  });
-  await Users.create({
-    firstName: "Dummy",
-    lastName: "User",
-    email: "dummy@dummy.com",
-    password: "123456",
-    profileImage: "https://placehold.co/300?text=D",
-    isLoggedin: false,
-    isVerified: true,
-  });
 
-  await Tweets.create({
-    tweetContent: "Test Tweet1",
-    UserId: 1,
-  });
-  await Tweets.create({
-    tweetContent: "Test Tweet2",
-    UserId: 1,
-  });
-  await Tweets.create({
-    tweetContent: "Test Tweet3",
-    UserId: 1,
-  });
-  await Tweets.create({
-    tweetContent: "Dummy Tweet1",
-    UserId: 2,
-  });
-  await Tweets.create({
-    tweetContent: "Dummy Tweet2",
-    UserId: 2,
-  });
+  // Uncomment the below code to create dummy data
+  //   await Users.create({
+  //     username: "testuser",
+  //     firstName: "Test",
+  //     lastName: "User",
+  //     email: "test@test.com",
+  //     password: "123456",
+  //     profileImage: "https://placehold.co/300?text=T",
+  //     isLoggedin: false,
+  //     isVerified: true,
+  //   });
+  //   await Users.create({
+  //     firstName: "Dummy",
+  //     lastName: "User",
+  //     email: "dummy@dummy.com",
+  //     password: "123456",
+  //     profileImage: "https://placehold.co/300?text=D",
+  //     isLoggedin: false,
+  //     isVerified: true,
+  //   });
+
+  //   await Tweets.create({
+  //     tweetContent: "Test Tweet1",
+  //     UserId: 1,
+  //   });
+  //   await Tweets.create({
+  //     tweetContent: "Test Tweet2",
+  //     UserId: 1,
+  //   });
+  //   await Tweets.create({
+  //     tweetContent: "Test Tweet3",
+  //     UserId: 1,
+  //   });
+  //   await Tweets.create({
+  //     tweetContent: "Dummy Tweet1",
+  //     UserId: 2,
+  //   });
+  //   await Tweets.create({
+  //     tweetContent: "Dummy Tweet2",
+  //     UserId: 2,
+  //   });
 }
 
 module.exports = { initDB, Users, Tweets };
