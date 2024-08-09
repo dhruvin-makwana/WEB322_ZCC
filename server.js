@@ -1,23 +1,3 @@
-const express = require("express");
-const path = require("path");
-
-const app = express();
-app.set("view engine", "ejs");
-
-var cookieParser = require("cookie-parser");
-const { randomInt } = require("crypto");
-
-const authMiddleware = require("./middlewares/authMiddleware");
-app.use(cookieParser());
-app.use(express.static("public"));
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-
-// select *  from users where username=testuser
-
-// users.filter((elm)=>elm.username=="testuser")
-
-
 let users = [
   {
     username: "testuser",
@@ -71,11 +51,39 @@ let users = [
     ],
   },
 ];
+const express = require("express");
+const path = require("path");
+
+const app = express();
+app.set("view engine", "ejs");
+
+var cookieParser = require("cookie-parser");
+const { randomInt } = require("crypto");
+
+// const authMiddleware = require("./middlewares/authMiddleware");
+app.use(cookieParser());
+app.use(express.static("public"));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+app.use(function(req, res, next) {
+  if (req.path === "/login") {
+    next();
+  } else {
+    let user = users.find((elm) => elm.username === req.cookies["username"]);
+    if (user && user.isLoggedin) {
+      req.user = user;
+      next();
+    } else {
+      res.redirect("/login");
+    }
+  }
+})
 
 app.locals.startedAt = new Date();
 app.set("test-setting", "settings-val");
 
-app.use(authMiddleware);
+// app.use(authMiddleware);
 
 app.get("/login", (req, res) => {
   res.sendFile(path.join(__dirname, "/views/login.html"));
